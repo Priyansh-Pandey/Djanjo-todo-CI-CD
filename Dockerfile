@@ -1,23 +1,20 @@
-# First stage: build with Python & pip
-FROM python:3.12-slim AS builder
+FROM python:3.12 AS builder
 
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --prefix=/install -r requirements.txt
+WORKDIR /data
 
-# Second stage: minimal runtime image
+RUN pip install --upgrade pip setuptools
+
+
+RUN pip install django==3.2
+
 FROM debian:bookworm-slim
 
-# Install Python manually
-RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
-
-COPY --from=builder /install /usr/local
-WORKDIR /app
 COPY . .
 
-RUN python3 manage.py migrate
+RUN python manage.py migrate
 
 EXPOSE 8000
 
-ENTRYPOINT ["python3", "manage.py"]
-CMD ["runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["python" , "manage.py"]
+
+CMD ["runserver","0.0.0.0:8000"]
