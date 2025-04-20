@@ -7,8 +7,6 @@ RUN pip install --upgrade pip setuptools
 
 RUN pip install django==3.2
 
-FROM debian:bookworm-slim
-
 COPY . .
 
 RUN python manage.py migrate
