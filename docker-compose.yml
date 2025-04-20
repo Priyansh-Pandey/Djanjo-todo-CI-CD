@@ -1,7 +1,7 @@
 version : "3.3"
 services :
   web :
-     build : .
+     image: priyansh26/flask-app2:latest
      ports :
          - "8000:8000"
      volumes:
